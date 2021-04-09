@@ -1,79 +1,102 @@
-## django-context
+# django-logging-context
 
-#### `django-context` is an BSD licensed library written in Python. It could be helpful for you if you wanna set some custom context in your django app. The one of the examples is add an extra info into your logging records. Also, you can use a request object in any place of an application cause this library provides a capability to reach it out at any time during a request.
+## Description
+`django-logging-context` is BSD licensed library extending default django 
+logging context with following additional values:
 
-### Quick start
+- request id,
+- request duration,
+- remote address,
+- response length,
+- user id,
+- username.
 
-1 install the library:
+## Quick start
+
+1. install the library:
 ```bash
-pip install django-context
+pip install django-logging-context -y
 ```
 
-2 Add `django-context` to your INSTALLED_APPS setting like this:
+2. Add `django-logging-context` to your `INSTALLED_APPS` setting like this:
 ```Python
     INSTALLED_APPS = [
         ...
-        django_context,
+        'django_logging_context',
     ]
 ```
 
-3 Add proxy middleware to your MIDDLEWARE setting like this:
+3. Add proxy middleware to your `MIDDLEWARE` setting like this:
 ```Python
 MIDDLEWARE = [
-    'django_context.middlewares.ProxyMiddleware',
+    'django_logging_context.middlewares.LoggingContextMiddleware',
     ...
 ]
 ```
-It's important to place this `ProxyMiddleware` at the first place in a `MIDDLEWARE` to allow to calculate duration of response more precisely.
+It's important to place this `LoggingContextMiddleware` at the first place in 
+a `MIDDLEWARE` to allow to calculate duration of response more precisely.
 
-4 If you just want to add info about request duration and request id to your log records then you can use `GlobalWSGIMiddleware` in your `wsgi.py` like this:
+4. If you just want to add info about request duration and request id to your 
+   log records then you can use `LoggingWSGIMiddleware` in your `wsgi.py` like
+   this:
 ```Python
-application = GlobalWSGIMiddleware(get_wsgi_application())
+from django_logging_context.wsgi import LoggingWSGIMiddleware
+application = LoggingWSGIMiddleware(get_wsgi_application())
 ```
 
-5 Use this example of logging setting to set up your loggers correctly
+5. Use this example of logging setting to set up your loggers correctly
 
 ```Python
+import os
+
+LOG_LEVEL = os.environ.get('LOG_LEVEL', 'INFO')
+DB_LOG_LEVEL = os.environ.get('DB_LOG_LEVEL', LOG_LEVEL)
+REQUESTS_LOG_LEVEL = os.environ.get('REQUESTS_LOG_LEVEL', LOG_LEVEL)
+CELERY_LOG_LEVEL = os.environ.get('CELERY_LOG_LEVEL', LOG_LEVEL)
+SENTRY_LOG_LEVEL = os.environ.get('SENTRY_LOG_LEVEL', LOG_LEVEL)
+
 LOGGING = {
     'version': 1,
+    'loggers': {
+        'django': {'level': LOG_LEVEL},
+        'django.db': {'level': DB_LOG_LEVEL},
+        'urllib3': {'level': REQUESTS_LOG_LEVEL},
+        'celery': {'level': CELERY_LOG_LEVEL},
+        'sentry': {'level': SENTRY_LOG_LEVEL},
+    },
+    'root': {
+        'level': LOG_LEVEL,
+        'handlers': ['console']
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+            'filters': ['extending_context_filter']
+        }
+    },
+    'filters': {
+        'extending_context_filter': {
+            '()': 'django_logging_context.logging.ContextExtendingFilter'
+        }
+    },
     'formatters': {
         'verbose': {
             'format': ('[django] %(levelname)s %(asctime)s'
                        ' %(name)s/%(module)s'
                        ' %(process)d/%(thread)d'
                        ' request_id: %(request_id)s'
+                       ' remote_addr: %(remote_addr)s'
                        ' user_id: %(user_id)s'
+                       ' username: %(username)s'
                        ' duration: %(response_duration)s'
                        '  %(message)s')
         },
     },
-    'filters': {
-        'context_filter': {
-            '()': 'django_context.logging.ContextFilter'
-        }
-    },
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose',
-            'filters': ['context_filter']
-        }
-    },
-    'loggers': {
-        'django_context': {
-            'level': 'INFO',
-            'handlers': ['console'],
-            'propagate': True,
-        },
-        'django': {
-            'level': 'INFO',
-            'handlers': ['console'],
-            'propagate': True,
-        },
-    }
 }
 ```
 
-### Log records example
-<img src="./pictures/log_records_example.png" width="1200" height="130">
+## Log records example
+```log
+[django] INFO 2021-04-08 18:12:13,573 django.server/basehttp 47385/123145535799296 request_id: ea9a2dfd-a662-4632-84d0-d0c5151b5422 remote_addr: 127.0.0.1 user_id: 2 duration: 1.548695s  "GET /admin/ HTTP/1.1" 200 46937
+```

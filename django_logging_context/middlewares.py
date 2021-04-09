@@ -1,23 +1,13 @@
 import logging
 from time import time
 
-from django.core.servers.basehttp import ServerHandler
-
-from django_context import tools
+from . import tools
 
 
 LOGGER = logging.getLogger(__name__)
 
 
-def _log_response(request, response):
-    content_length = response.get('content-length')
-    server_protocol = request.environ.get('SERVER_PROTOCOL')
-    LOGGER.info(
-        f'"{request.method} {request.path} {server_protocol}"'
-        f' {response.status_code} {content_length}')
-
-
-class ProxyMiddleware:
+class LoggingContextMiddleware:
 
     SKIPPED_MEDIA_TYPES = ('text/html', 'text/javascript')
 
@@ -58,18 +48,3 @@ class ProxyMiddleware:
 
         LOGGER.debug(f"RESPONSE: {''.join(result)}")
         return response
-
-
-class GlobalWSGIMiddleware:
-
-    def __init__(self, application):
-        self.application = application
-
-    def __call__(self, environ, start_response):
-        for chunk in self.application(environ, start_response):
-            yield chunk
-        if not isinstance(start_response.__self__, ServerHandler):
-            request = tools.get_django_request()
-            response = tools.get_django_response()
-            if request and response:
-                _log_response(request, response)

@@ -2,16 +2,6 @@
 *.egg-info/
 *.eggs
 *.pyc
-.coverage
-.idea
-.tox/
-/.project
-/.pydevproject
-/.ve
-/.venv
 build/
 dist/
-docs/_build
-htmlcov/
 MANIFEST
-test_files/

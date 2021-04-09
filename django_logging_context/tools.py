@@ -51,6 +51,19 @@ def get_user_id():
     return None
 
 
+def get_username():
+    user = _get_user()
+    if user:
+        return user.id
+    return None
+
+
+def get_remote_addr():
+    request = get_django_request()
+    if request:
+        return request.META['REMOTE_ADDR']
+
+
 def set_django_request(value):
     _get_storage()[DJANGO_REQUEST_KEY] = value
 
