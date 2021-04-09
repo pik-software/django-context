@@ -16,7 +16,7 @@ python -m pip install "pygments>=2.2.0"
 VERSION=$(python setup.py --version)
 NAME=$(python setup.py --name)
 
-LAST_VERSION=$(git describe --tags --abbrev=0 --match v*)
+LAST_VERSION=$(git describe --tags --abbrev=0 --always --match v*)
 LAST_VERSION=${LAST_VERSION:1}
 
 if [[ ${LAST_VERSION} == ${VERSION} ]]; then
