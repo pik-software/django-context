@@ -43,5 +43,5 @@ setup(
         'Topic :: Internet :: WWW/HTTP',
         'Topic :: Internet :: Log Analysis',
         'Topic :: System :: Logging',
-    ],
+    ]
 )
