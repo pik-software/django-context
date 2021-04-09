@@ -1,6 +1,6 @@
 # Changes
 
-# 1.0.0 (2021-04-09)
+# 1.0.1 (2021-04-09)
 - Forked & renamed
 - Added `username` & `remote_addr`  context variables
 - Replaced absolute import with relative
