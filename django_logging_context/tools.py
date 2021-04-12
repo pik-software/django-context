@@ -54,7 +54,7 @@ def get_user_id():
 def get_username():
     user = _get_user()
     if user:
-        return user.id
+        return user.username
     return None
 
 

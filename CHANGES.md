@@ -1,5 +1,8 @@
 # Changes
 
+# 1.0.2 (2021-04-12)
+- Fixed username fetching
+
 # 1.0.1 (2021-04-09)
 - Forked & renamed
 - Added `username` & `remote_addr`  context variables
