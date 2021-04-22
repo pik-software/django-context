@@ -90,6 +90,7 @@ LOGGING = {
                        ' user_id: %(user_id)s'
                        ' username: %(username)s'
                        ' duration: %(response_duration)s'
+                       ' uri: %(uri)s'
                        '  %(message)s')
         },
     },
@@ -98,5 +99,5 @@ LOGGING = {
 
 ## Log records example
 ```log
-[django] INFO 2021-04-08 18:12:13,573 django.server/basehttp 47385/123145535799296 request_id: ea9a2dfd-a662-4632-84d0-d0c5151b5422 remote_addr: 127.0.0.1 user_id: 2 duration: 1.548695s  "GET /admin/ HTTP/1.1" 200 46937
+[django] INFO 2021-04-08 18:12:13,573 django.server/basehttp 47385/123145535799296 request_id: ea9a2dfd-a662-4632-84d0-d0c5151b5422 remote_addr: 127.0.0.1 user_id: 2 username: root duration: 1.548695s uri: http://127.0.0.1:8000/login/?next=/ "GET /admin/ HTTP/1.1" 200 46937
 ```

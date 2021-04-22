@@ -1,5 +1,8 @@
 # Changes
 
+# 1.1.0 (2021-04-22)
+- Added uri logging
+
 # 1.0.2 (2021-04-12)
 - Fixed username fetching
 
