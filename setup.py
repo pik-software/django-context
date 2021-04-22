@@ -11,7 +11,7 @@ with open('README.md') as readme:
 
 setup(
     name='django-logging-context',
-    version='1.0.2',
+    version='1.1.0',
     packages=find_packages(),
     include_package_data=True,
     license='BSD',
