@@ -27,7 +27,7 @@ class LoggingContextMiddleware:
         if request_start_time:
             tools.set_response_duration(time() - request_start_time)
 
-        content_type = response._headers.get('content-type') # noqa: pylint=protected-access
+        content_type = response.get('content-type')
         if content_type:
             media_type = content_type[1].split(';')[0]
             if media_type in self.SKIPPED_MEDIA_TYPES:
