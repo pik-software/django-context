@@ -15,6 +15,7 @@ class ContextExtendingFilter(logging.Filter):
         record.remote_addr = tools.get_remote_addr()
         response_duration = tools.get_response_duration()
         request = tools.get_django_request()
+        record.uri = None
         if request and request.build_absolute_uri:
             record.uri = request.build_absolute_uri()
         if response_duration is not None:
