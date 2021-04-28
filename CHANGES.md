@@ -1,5 +1,9 @@
 # Changes
 
+# 1.1.1 (2021-04-28)
+- Fixed response._headers access
+- Fixed missing `uri` variable
+
 # 1.1.0 (2021-04-22)
 - Added uri logging
 
