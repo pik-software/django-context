@@ -44,10 +44,10 @@ def get_django_response():
     return _get_storage().get(DJANGO_RESPONSE_KEY)
 
 
-def get_user_id():
+def get_user_pk():
     user = _get_user()
     if user:
-        return user.id
+        return user.pk
     return None
 
 
