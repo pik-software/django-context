@@ -1,5 +1,8 @@
 # Changes
 
+# 1.1.2 (2021-05-04)
+- Fixed missing user id field (thanks @John2013)
+
 # 1.1.1 (2021-04-28)
 - Fixed response._headers access
 - Fixed missing `uri` variable
