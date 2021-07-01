@@ -1,5 +1,8 @@
 # Changes
 
+# 1.1.3 (2021-07-01)
+- Fixed premature user fetching
+
 # 1.1.2 (2021-05-04)
 - Fixed missing user id field (thanks @John2013)
 
