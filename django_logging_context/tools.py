@@ -2,6 +2,8 @@ import uuid
 from time import time
 from threading import current_thread
 
+from django.utils.functional import SimpleLazyObject, empty
+
 
 _THREAD_STORAGES = {}
 
@@ -32,7 +34,11 @@ def _get_user():
         return user
     django_request = get_django_request()
     if django_request and hasattr(django_request, 'user'):
-        return django_request.user
+        is_empty = (
+            isinstance(django_request.user, SimpleLazyObject)
+            and django_request.user._wrapped == empty)
+        if not is_empty:
+            return django_request.user
     return None
 
 
