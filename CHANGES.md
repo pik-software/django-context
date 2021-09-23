@@ -1,5 +1,8 @@
 # Changes
 
+# 1.1.4 (2021-07-01)
+- Fixed default_app_config warning
+
 # 1.1.3 (2021-07-01)
 - Fixed premature user fetching
 
